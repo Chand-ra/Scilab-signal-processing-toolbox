@@ -10,9 +10,9 @@ function y = fftshift1(x, dim)
 //x = [0:6]
 //fftshift(x)
 //ans =
-//4 5 6 0 1 2 3 
+//4 5 6 0 1 2 3
 
-  funcprot(0);  
+  funcprot(0);
   rhs = argn(2);
   if (rhs < 1 | rhs > 2) then
     error ("fftshift1: wrong number of arguments");
@@ -23,7 +23,7 @@ function y = fftshift1(x, dim)
   end
 
   if (rhs == 2) then
-    if (~(isscalar(dim) && dim > 0 && dim == fix(dim))) then
+    if (~(isscalar(dim) & dim > 0 & dim == fix(dim))) then
       error ("fftshift1: arg2 (dim) must be a positive integer");
     end
     nd = ndims(x);
@@ -51,6 +51,12 @@ function y = fftshift1(x, dim)
   end
 
 endfunction
+
+//test: input validation:
+//assert_checkerror("fftshift1()", "fftshift1: wrong number of arguments");
+//assert_checkerror("fftshift1(1, 2, 3)", "Wrong number of input arguments.");
+//assert_checkerror("fftshift1(0:2, -1)", "fftshift1: arg2 (dim) must be a positive integer");
+//assert_checkerror("fftshift1(0:2, 0:3)", "fftshift1: arg2 (dim) must be a positive integer");
 
 //test 1:
 //x = [0:7];
