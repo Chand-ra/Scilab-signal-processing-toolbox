@@ -32,7 +32,7 @@ function y = fftshift1(x, dim)
     idx = cell();
     idx = repmat({':'}, nd, 1);
     idx{dim} = [sz2+1:sz(dim), 1:sz2];
-    y = x(idx{:});
+    y = x(idx{1}, idx{2});
   else
     if (isvector(x)) then
       xl = length(x);
@@ -46,33 +46,40 @@ function y = fftshift1(x, dim)
       for i = 1:nd
           idx{i} = [sz2(i) + 1:sz(i), 1:sz2(i)];
       end
-      y = x(idx{:});
+      y = x(idx{1}, idx{2});
     end
   end
 
 endfunction
 
-//test: input validation:
+//input validation:
 //assert_checkerror("fftshift1()", "fftshift1: wrong number of arguments");
 //assert_checkerror("fftshift1(1, 2, 3)", "Wrong number of input arguments.");
 //assert_checkerror("fftshift1(0:2, -1)", "fftshift1: arg2 (dim) must be a positive integer");
 //assert_checkerror("fftshift1(0:2, 0:3)", "fftshift1: arg2 (dim) must be a positive integer");
 
-//test 1:
+//test mx1 input:
 //x = [0:7];
 //y = fftshift1 (x);
 //assert_checkequal (y, [4 5 6 7 0 1 2 3]);
 //assert_checkequal (fftshift1(y), x);
 
-//test 2:
+//test 1xm input:
 //x = [0:7]';
 //y = fftshift1(x);
 //assert_checkequal(y, [4;5;6;7;0;1;2;3]);
 //assert_checkequal(fftshift1(y), x);
 
-//FIXME: fftshift1 doesn't work for mxn input
+//test mxn input:
 //x = [0:3];
 //x = [x;2*x;3*x+1;4*x+1];
 //y = fftshift1 (x);
 //assert_checkequal(y, [[7 10 1 4];[9 13 1 5];[2 3 0 1];[4 6 0 2]]);
 //assert_checkequal(fftshift1(y), x);
+
+//FIXME: fftshift 1 fails when dim is provided
+//x = [0:3];
+//x = [x;2*x;3*x+1;4*x+1];
+//y = fftshift1(x, 1);
+//assert_checkequal(y, [[7 10 1 4];[9 13 1 5];[2 3 0 1];[4 6 0 2]]);
+//assert_checkequal(fftshift1(y, 1), x);
