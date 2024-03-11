@@ -29,6 +29,10 @@ function y = sinewave (m, n, d)
     error("sinewave: arg2 (n) must be non-zero");
   end
 
+  if (~isscalar(m)) then
+      error("sinewave: arg1 (m) must be a real scalar");
+  end
+
   if (rhs < 3) then
     d = 0;
   end
@@ -36,6 +40,12 @@ function y = sinewave (m, n, d)
   y = sin(((1 : m) + d - 1) * 2 * %pi / n);
 
 endfunction
+
+//input validation:
+//assert_checkerror("sinewave()", "sinewave: wrong number of input arguments");
+//assert_checkerror("sinewave(-1, 2)", "sinewave: arg1 (m) must be non-negative");
+//assert_checkerror("sinewave([-2, 5, -3], 2)", "sinewave: arg1 (m) must be a real scalar");
+//assert_checkerror("sinewave(0, 0, 5)", "sinewave: arg2 (n) must be non-zero");
 
 //tests:
 //assert_checkequal(sinewave(1), 0);

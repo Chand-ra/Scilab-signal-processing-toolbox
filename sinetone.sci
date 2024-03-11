@@ -36,12 +36,12 @@ function y = sinetone(freq, rate, sec, ampl)
             error("sinetone: wrong number of input arguments");
     end
 
-    if (isvector(freq) & isvector(ampl) & size(freq) ~= size(ampl)) then
+    if ( isvector(freq) & isvector(ampl) & ~isequal(size(freq), size(ampl)) ) then
         error("sinetone: freq and ampl must be vectors of equal size");
     end
 
     if ( ~(isscalar(rate) && isscalar(sec)) ) then
-        error("sinetone: rate and sec must be scalars")
+        error("sinetone: rate and sec must be scalars");
     end
 
     n = length (freq);
@@ -54,4 +54,13 @@ function y = sinetone(freq, rate, sec, ampl)
 
 endfunction
 
+//input validation:
+//assert_checkerror("sinetone()", "sinetone: wrong number of input arguments");
+//assert_checkerror("sinetone([6, 9, 4, 2], 2, 3, [6, 2, 0])", "sinetone: freq and ampl must be vectors of equal size");
+//assert_checkerror("sinetone(1, [1, 2])", "sinetone: rate and sec must be scalars");
+//assert_checkerror("sinetone(1, 2, [4, 3])", "sinetone: rate and sec must be scalars");
+
 //tests:
+//assert_checkequal(size(sinetone(18e6, 150e6, 19550/150e6, 1)), [19550, 1]);
+//assert_checkequal(sinetone(5), sinetone(5, 8000, 1, 64));
+//assert_checkequal(size(sinetone([1, 2, 3], 4000, 1, [8, 9, 6])), [4000, 3]);
