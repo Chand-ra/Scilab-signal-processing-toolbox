@@ -29,10 +29,10 @@ function y = fftshift1(x, dim)
     nd = ndims(x);
     sz = size(x);
     sz2 = ceil(sz(dim) / 2);
-    idx = cell();
-    idx = repmat({':'}, nd, 1);
-    idx{dim} = [sz2+1:sz(dim), 1:sz2];
-    y = x(idx{1}, idx{2});
+    dim_idx = [sz2+1:sz(dim), 1:sz2];
+    idx = repmat({':'}, 1, max(size(size(x))));
+    idx(dim)= {dim_idx};
+    y = x(idx{:});
   else
     if (isvector(x)) then
       xl = length(x);
@@ -77,9 +77,9 @@ endfunction
 //assert_checkequal(y, [[7 10 1 4];[9 13 1 5];[2 3 0 1];[4 6 0 2]]);
 //assert_checkequal(fftshift1(y), x);
 
-//FIXME: fftshift 1 fails when dim is provided
+//test dim is provided:
 //x = [0:3];
 //x = [x;2*x;3*x+1;4*x+1];
-//y = fftshift1(x, 1);
-//assert_checkequal(y, [[7 10 1 4];[9 13 1 5];[2 3 0 1];[4 6 0 2]]);
-//assert_checkequal(fftshift1(y, 1), x);
+//y = fftshift(x, 1);
+//assert_checkequal(y, [[1 4 7 10];[1 5 9 13];[0 1 2 3];[0 2 4 6]]);
+//assert_checkequal(fftshift(y, 1), x);
