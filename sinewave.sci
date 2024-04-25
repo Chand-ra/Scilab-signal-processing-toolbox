@@ -5,7 +5,7 @@ function y = sinewave (m, n, d)
 //y= sinewave(m,n)
 //y= sinewave(m,n,d)
 //Parameters:
-//m: Input vector
+//m: Real positive scalar
 //n: The default value for n is m
 //d: The default value for d is 0
 //Examples:
