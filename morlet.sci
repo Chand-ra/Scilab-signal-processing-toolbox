@@ -3,8 +3,8 @@ function [psi,x] = morlet(lb, ub, n)
 //Calling sequence:
 //[psi,x]= morlet(lb,ub,n)
 //Parameters:
-//lb: Real or complex valued vector/matrix
-//ub: Real or complex valued vector/matrix
+//lb: Real or complex valued vector/scalar
+//ub: Real or complex valued vector/scalar
 //n: Real positive scalar number
 //Description:
 //This function returns values of the Morlet wavelet in the specified interval for all the sample points.
@@ -27,7 +27,10 @@ function [psi,x] = morlet(lb, ub, n)
   if (~isreal(n) | n <= 0) then
     error("morlet: n must be a strictly positive real number");
   end
-  x = linspace(lb, ub, n);
+  x = [];
+  for i=1:length(lb)
+      x(i, :) = linspace(lb(i), ub(i), n);
+  end
   psi = cos(5.*x) .* exp(-x.^2/2);
 
 endfunction
@@ -36,7 +39,7 @@ endfunction
 //assert_checkerror("morlet()", "morlet: wrong number of input arguments");
 //assert_checkerror("morlet(1, 2)", "morlet: wrong number of input arguments");
 //assert_checkerror("morlet(1, 2, 3, 4)", "Wrong number of input arguments.");
-//assert_checkerror("morletl(1, 2, -1)", "morlet: n must be strictly positive real number");
+//assert_checkerror("morlet(1, 2, -1)", "morlet: n must be a strictly positive real number");
 //assert_checkerror("morlet(1, 2, 2+3*%i)", "morlet: n must be a strictly positive real number");
 //assert_checkerror(" morlet([5, 2, 7], [1, 3], 3)", "morlet: arg1 and arg2 msut have same dimension");
 
@@ -52,14 +55,14 @@ endfunction
 
 //test real vector:
 //[a, b] = morlet([1, 2], [3, 4], 2);
-//A(:, :, 1) = [0.1720498, -0.113556];
-//A(:, :, 2) = [-0.008439, 0.0001369];
-//B(:, :, 1) = [1, 2];
-//B(:, :, 2) = [3, 4];
+//A = [0.1720498, -0.0084394; -0.113556, 0.0001369];
+//B = [1, 3; 2, 4];
 //assert_checkalmostequal(A, a, 5e-5);
 //assert_checkalmostequal(B, b, %eps);
 
 //test complex vector:
 //[a, b] = morlet([1 + 2*%i, 3*%i], [2*%i, 2 + 3*%i], 1);
-//assert_checkalmostequal(a, [81377.395877, -1.90692E7+5732843.75676*%i], 5e-5);
-//assert_checkalmostequal(b, [2*%i, 2+3*%i], %eps);
+//A = [81377.39587; -19069291.16508 + 5732843.75676*%i];
+//B = [2*%i; 2+3*%i];
+//assert_checkalmostequal(a, A, 5e-5);
+//assert_checkalmostequal(b, B, %eps);
