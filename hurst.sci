@@ -25,9 +25,13 @@ function H = hurst(x)
 
   [xr, xc] = size (x);
 
-  s = stdev(x);
-  w = cumsum(x - mean(x));
-  RS = (max(w) - min(w)) ./ s;
+  s = stdev(x, 'r');
+  y = [];
+  for i = 1:xr
+    y(i, :) = x(i, :) - mean(x, 'm');
+  end
+  w = cumsum(y);
+  RS = (max(w, 'r') - min(w, 'r')) ./ s;
   H = log(RS) / log(xr);
 
 endfunction
@@ -40,4 +44,4 @@ endfunction
 //tests:
 //assert_checkalmostequal(hurst([1, 5, 7, 14, 6]), 0.31180, 5*10^-5);
 //assert_checkalmostequal(hurst([3; 6; 9; 5]), 0.24271, 5*10^-5);
-//assert_checkalmostequal(hurst([-1, 9, 4; 7, 4, -3; 6, 12, -18]), 1.06622, 5*10^-5);
+//assert_checkalmostequal(hurst([-1, 9, 4; 7, 4, -3; 6, 12, -18]),[ 0.124902, 0.063474, 0.084510], 5*10^-5);
