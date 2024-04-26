@@ -6,10 +6,10 @@ function y = sinewave (m, n, d)
 //y= sinewave(m,n,d)
 //Parameters:
 //m: Real positive scalar
-//n: The default value for n is m
-//d: The default value for d is 0
+//n: The value of n in the formula {sin (2 * pi * (i+d-1) / n}. The default value for n is m.
+//d: The value of d in the formula {sin (2 * pi * (i+d-1) / n}. The default value for d is 0.
 //Examples:
-//sivewave(1, 4, 1)
+//sinewave(1, 4, 1)
 //ans = 1
 
   funcprot(0);
