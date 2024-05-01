@@ -33,7 +33,8 @@ function y = dst1(x, n)
     x (nr-n+1 : n, :) = [];
   end
 
-  y = fft([ zeros(1, nc); x; zeros(1, nc); -flipdim(x, 1) ])/2*%i;
+  d = [ zeros(1, nc); x; zeros(1, nc); -flipdim(x, 1) ];
+  y = fft(d, -1, find(size(d) ~= 1, 1))/2*%i;
   y = y(2:nr+1, :);
   if (isreal(x))
     y = real (y);
@@ -58,4 +59,4 @@ endfunction
 //assert_checkalmostequal(dst1([-1 2 2], 5), [3.2321, 0.8660, -3.0000], 5*10^-5);
 //assert_checkalmostequal(dst1([1+2*%i, 5+3*%i, 8+2*%i]), [11.3639+5.8284*%i, -7.0000-0*%i, 1.3640-0.1716*%i], 5*10^-4);
 //assert_checkalmostequal(dst1([1+2*%i; 5+3*%i; 8+2*%i], 2), [7.7942+3.4641*%i; -6.0622-0*%i; 0], 5*10^-5);
-//assert_checkalmostequal(dst1([-1-3*%i, 4*%i; -2-7*%i, 3]), [0-5.1961524*%i, -5.1961-12.1243*%i; -1.7320+6.9282*%i, 3.4641+0], 5*10^-5) 
+//assert_checkalmostequal(dst1([-1-3*%i, 4*%i; -2-7*%i, 3]), [-2.5981-8.6603*%i, 2.5981+3.4641*%i; 0.8660+3.4641*%i, -2.5981+3.4641*%i], 5*10^-5);
