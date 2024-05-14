@@ -5,12 +5,13 @@ function m = ifht(d, n, dim)
 //m: ifht(d,n)
 //m: ifht(d,n,dim)
 //Parameters: 
-//d: real or complex scalar or vector
-//n: Similar to the options of FFT function
-//dim: Similar to the options of FFT function 
+//d: Real or complex scalar or vector.
+//n: Integer. Specifies the number of elements of x to be used.
+//dim: Integer. Specifies the dimention of the matrix along which the ifht is performed.
 //Description:
 //Calculate the inverse Fast Hartley Transform of real input d. If d is a matrix, the inverse Hartley transform is calculated along the columns by default.
-//The options n and dim are similar to the options of FFT function.
+//The options n and dim are similar to the options of FFT function. 'n' is an integer that determines the number of elements of 'd' to use. If 'n' is larger than the dimension along which the ifht is calculated, then 'd' is resized and padded with zeros to match the required size. If n < d, then 'd' is truncated to match the required size.
+//'dim' is an integer that specifies the dimension of the matrix along which the ifht is to be performed. By default, the ifht is computed along the first non-singleton dimension of the array.
 //The forward and inverse Hartley transforms are the same (except for a scale factor of 1/N for the inverse hartley transform), but implemented using different functions.
 //The definition of the forward hartley transform for vector d, m[K] = 1/N \sum_{i=0}^{N-1} d[i]*(cos[K*2*pi*i/N] + sin[K*2*pi*i/N]),
 //for 0 <= K < N. m[K] = 1/N \sum_{i=0}^{N-1} d[i]*CAS[K*i], for 0 <= K < N.
