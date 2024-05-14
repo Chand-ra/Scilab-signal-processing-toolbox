@@ -11,7 +11,7 @@ function y = detrend1 (x, p)
 //The second argument p is optional.  If it is not specified, a value of 1 is assumed.  This corresponds to removing a linear trend.
 //The order of the polynomial can also be given as a string, in which case p must be either "constant" (corresponds to 'P=0') or "linear" (corresponds to 'P=1')
 //Example:
-//detrend([1, 6, 9])
+//detrend1([1, 6, 9])
 //ans = [ -0.3333, 0.6667, -0.3333]
 
   funcprot(0);
