@@ -1,11 +1,3 @@
-function pwelch(varargin)
-  nvarargin = length(varargin);
-  for iarg=1:nvarargin
-    arg = varargin(iarg);
-    disp(arg);
-    end
-endfunction
-
 function varargout = tfestimate(varargin)
 //Estimate transfer function of system with input x and output y. Use the Welch (1967) periodogram/FFT method.
 //Calling Sequence:
@@ -57,7 +49,7 @@ function varargout = tfestimate(varargin)
     pwelch(varargin(:));
   elseif (nargout() == 1)
     Pxx = pwelch(varargin(:));
-    varargout{1} = Pxx;
+    varargout(1) = Pxx;
   elseif (nargout() >= 2)
     [Pxx,f] = pwelch(varargin(:));
     varargout(1) = Pxx;
