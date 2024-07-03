@@ -42,8 +42,8 @@ endfunction
 
 //A = [1 2; 3 4];
 //B = [3 2; 1 4];
-//assert_checkalmostequal(tf2sos(A, B), 0.3333 0.0679 0.4768 1 -0.6667 1.3333; 1 2.7963 0 1 1 0], 5*10^-4);
+//assert_checkalmostequal(tf2sos(A, B), [0.3333 0.0679 0.4768 1 -0.6667 1.3333; 1 2.7963 0 1 1 0], 5*10^-4);
 
 //A = [1 1 1 1];
 //B = [-1 -1; -1 -1];
-//assert_checkequal(tf2sos(A, B), [-1 -1 -1 1 0 1; 0 1 0 1 1 0]);
+//assert_checkalmostequal(tf2sos(A, B), [-1 0 -1 1 0 1; 1 1 0 1 1 0], %eps);
