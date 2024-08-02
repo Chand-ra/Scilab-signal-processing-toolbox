@@ -46,4 +46,25 @@ endfunction
 
 //A = [1 1 1 1];
 //B = [-1 -1; -1 -1];
-//assert_checkalmostequal(tf2sos(A, B), [-1 0 -1 1 0 1; 1 1 0 1 1 0], %eps);
+//assert_checkalmostequal(clean(tf2sos(A, B)), [-1 0 -1 1 0 1; 1 1 0 1 1 0], 100*%eps);
+
+//b = [1, 1];  
+//a = [1, 2];  
+//expected_sos = [1, 1, 0, 1, 2, 0];
+//sos = tf2sos(b, a);
+//assert_checkalmostequal(sos, expected_sos, %eps);
+
+//b = [1, 2, 2];
+//a = [1, -1, 1];  
+//expected_sos = [1, 2, 2, 1, -1, 1];
+//sos = tf2sos(b, a);
+//assert_checkalmostequal(sos, expected_sos, 100*%eps);
+
+//b = [1, 1, 1, 1];  
+//a = [1, 1, 1, 1];  
+//expected_sos = [
+//    1, 0, 1, 1, 0, 1;
+//    1, 1, 0, 1, 1, 0
+//];
+//sos = clean(tf2sos(b, a));
+//assert_checkalmostequal(sos, expected_sos, 100*%eps);
