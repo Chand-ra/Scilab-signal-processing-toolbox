@@ -25,9 +25,9 @@ function [sos,g] = tf2sos (B, A)
   S = syslin([], inv_coeff(flipdim(B(:)', 2)), inv_coeff(flipdim(A(:)', 2)));
   [z,p,k] = tf2zp(S);
   if (nargout() < 2)
-    sos = zp2sos(z,p,k);
+    sos = clean(zp2sos(z,p,k));
   else
-    [sos,g] = zp2sos(z,p,k);
+    [sos,g] = clean(zp2sos(z,p,k));
   end
 
 endfunction
@@ -46,7 +46,7 @@ endfunction
 
 //A = [1 1 1 1];
 //B = [-1 -1; -1 -1];
-//assert_checkalmostequal(clean(tf2sos(A, B)), [-1 0 -1 1 0 1; 1 1 0 1 1 0], 100*%eps);
+//assert_checkalmostequal(tf2sos(A, B), [-1 0 -1 1 0 1; 1 1 0 1 1 0], 100*%eps);
 
 //b = [1, 1];  
 //a = [1, 2];  
@@ -66,5 +66,5 @@ endfunction
 //    1, 0, 1, 1, 0, 1;
 //    1, 1, 0, 1, 1, 0
 //];
-//sos = clean(tf2sos(b, a));
+//sos = tf2sos(b, a);
 //assert_checkalmostequal(sos, expected_sos, 100*%eps);
