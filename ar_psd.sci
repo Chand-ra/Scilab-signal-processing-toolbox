@@ -1,26 +1,37 @@
 function varargout = ar_psd(a, v, varargin)
 //Calculate the power spectrum of the autoregressive model.
+
 //Calling Sequence:
-// [PSD,F_OUT]=ar_psd (A, V)
-// [PSD,F_OUT]=ar_psd (A, V, FREQ)
-// [PSD,F_OUT]=ar_psd (A, V, FREQ, FS)
-// [PSD,F_OUT]=ar_psd (..., RANGE)
-// [PSD,F_OUT]=ar_psd (..., METHOD)
-// [PSD,F_OUT]=ar_psd (..., PLOTTYPE)
+// [psd, f_out] = ar_psd(a, v)
+// [psd, f_out] = ar_psd (a, v, freq)
+// [psd, f_out] = ar_psd (a, v, freq, fs)
+// [psd, f_out] = ar_psd (..., range)
+// [psd, f_out] = ar_psd (..., method)
+// [psd, f_out] = ar_psd (..., plottype)
+
 //Parameters:
-//A:List of M=(order+1) autoregressive model coefficients. The first element of "ar_coeffs" is the zero-lag coefficient, which always has a value of 1.
-//V:Square of the moving-average coefficient of the AR model.
-//FREQ:Frequencies at which power spectral density is calculated, or a scalar indicating the number of uniformly distributed frequency values at which spectral density is calculated.  (default = 256)
-//FS: Sampling frequency (Hertz) (default=1)
-//Range: 'half', 'onesided' : frequency range of the spectrum is from zero up to but not including sample_f/2. Power from negative frequencies is added to the positive side of the spectrum.'whole', 'twosided' : frequency range of the spectrum is-sample_f/2 to sample_f/2, with negative frequencies stored in "wrap around" order after the positive frequencies; e.g. frequencies for a 10-point 'twosided' spectrum are 0 0.1 0.2 0.3 0.4 0.5 -0.4 -0.3 -0.2 -0.1 'shift', 'centerdc' : same as 'whole' but with the first half of the spectrum swapped with second half to put the zero-frequency value in the middle.  (See "help fftshift". If "freq" is vector, 'shift' is ignored.  If model coefficients "ar_coeffs" are real, the default range is 'half', otherwise default range is 'whole'.
-// Method:'fft': use FFT to calculate power spectrum.  'poly': calculate power spectrum as a polynomial of 1/z N.B. this argument is ignored if the "freq" argument is a vector.  The default is 'poly' unless the "freq" argument is an integer power of 2.
-// Plot type:'plot', 'semilogx', 'semilogy', 'loglog', 'squared' or 'db':specifies the type of plot.  The default is 'plot', which means linear-linear axes.  'squared' is the same as 'plot'.  'dB' plots "10*log10(psd)".  This argument is ignored and a spectrum is not plotted if the caller requires a returned value.
-//PSD: estimate of power-spectral density
-//F_OUT: frequency values
+//Every parameter except for the first two is optional.
+//
+//a- List of m=(order + 1) autoregressive model coefficients. The first element of "ar_coeffs" is the zero-lag coefficient, which always has a value of 1.
+//v- Square of the moving-average coefficient of the AR model.
+//freq: Frequencies at which power spectral density is calculated, or a scalar indicating the number of uniformly distributed frequency values at which spectral density is calculated.  (default = 256)
+//fs- Sampling frequency (Hertz) (default=1)
+//range- 'half', 'onesided'- frequency range of the spectrum is from zero up to but not including sample_f/2. Power from negative frequencies is added to the positive side of the spectrum
+//'whole', 'twosided'- frequency range of the spectrum is-sample_f/2 to sample_f/2, with negative frequencies stored in "wrap around" order after the positive frequencies; e.g. frequencies for a 10-point 'twosided' spectrum are 0 0.1 0.2 0.3 0.4 0.5 -0.4 -0.3 -0.2 -0.1
+//'shift', 'centerdc'- same as 'whole' but with the first half of the spectrum swapped with second half to put the zero-frequency value in the middle. If "freq" is vector, 'shift' is ignored. If model coefficients "ar_coeffs" are real, the default range is 'half', otherwise default range is 'whole'.
+//Method-
+//'fft'- use fft to calculate power spectrum.
+//'poly'- calculate power spectrum as a polynomial of 1/z N.B. this argument is ignored if the "freq" argument is a vector. The default is 'poly' unless the "freq" argument is an integer power of 2.
+//Plot type- 'plot', 'semilogx', 'semilogy', 'loglog', 'squared' or 'db': specifies the type of plot. The default is 'plot', which means linear-linear axes.
+//'squared' is the same as 'plot'.  'dB' plots "10*log10(psd)".  This argument is ignored and a spectrum is not plotted if the caller requires a returned value.
+//psd: estimate of power-spectral density.
+//f_out: frequency values.
+
 //Description:
-//If the FREQ argument is a vector (of frequencies) the spectrum is calculated using the polynomial method and the METHOD argument is ignored.  For scalar FREQ, an integer power of 2, or METHOD = "FFT", causes the spectrum to be calculated by FFT. Otherwise, the spectrum is calculated as a polynomial.  It may be computationally more efficient to use the FFT method if length of the model is not much smaller than the number of frequency values.  The spectrum is scaled so that spectral energy (area under spectrum) is the same as the time-domain energy (mean square of the signal).	
+//If the 'freq' argument is a vector (of frequencies) the spectrum is calculated using the polynomial method and the METHOD argument is ignored.  For scalar 'freq', an integer power of 2, or method = "fft", causes the spectrum to be calculated by fft. Otherwise, the spectrum is calculated as a polynomial.  It may be computationally more efficient to use the fft methodif length of the model is not much smaller than the number of frequency values. The spectrum is scaled so that spectral energy (area under spectrum) is the same as the time-domain energy (mean square of the signal).
+
 //Examples:
-//[a,b]= ar_psd([1,2,3],2)
+//[a,b]= ar_psd([1,2,3], 2)
 
   funcprot(0);
   // Check fixed arguments
@@ -74,29 +85,29 @@ function varargout = ar_psd(a, v, varargin)
           error("ar_psd: control arg must be string.");
         end
       // Decode control-string arguments
-      elseif strcmp(arg, "plot") | strcmp(arg, "squared") then
+      elseif ~strcmp(arg, "plot") | ~strcmp(arg, "squared") then
         plot_type = 1;
-      elseif strcmp(arg, "semilogx") then
+      elseif ~strcmp(arg, "semilogx") then
         plot_type = 2;
-      elseif strcmp(arg, "semilogy") then
+      elseif ~strcmp(arg, "semilogy") then
         plot_type = 3;
-      elseif strcmp(arg, "loglog") then
+      elseif ~strcmp(arg, "loglog") then
         plot_type = 4;
-      elseif strcmp(arg, "dB") then
+      elseif ~strcmp(arg, "dB") then
         plot_type = 5;
-      elseif strcmp(arg, "fft") then
+      elseif ~strcmp(arg, "fft") then
         force_FFT = 1;
         force_poly = 0;
-      elseif strcmp(arg, "poly") then
+      elseif ~strcmp(arg, "poly") then
         force_FFT = 0;
         force_poly = 1;
-      elseif strcmp(arg, "half") | strcmp(arg, "onesided") then
+      elseif ~strcmp(arg, "half") | ~strcmp(arg, "onesided") then
         pad_fact = 2; // FFT zero-padding factor (pad FFT to double length)
         do_shift = 0;
-      elseif strcmp(arg, "whole") | strcmp(arg, "twosided") then
+      elseif ~strcmp(arg, "whole") | ~strcmp(arg, "twosided") then
         pad_fact = 1; // FFT zero-padding factor (do not pad)
         do_shift = 0;
-      elseif strcmp(arg, "shift") | strcmp(arg, "centerdc") then
+      elseif ~strcmp(arg, "shift") | ~strcmp(arg, "centerdc") then
         pad_fact = 1;
         do_shift = 1;
       else
